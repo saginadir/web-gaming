@@ -1,8 +1,14 @@
-var gulp = require('gulp');
-var mainBowerFiles = require('main-bower-files');
-var less = require('gulp-less');
-var rename = require('gulp-rename');
-var cleanCSS = require('gulp-clean-css');
+"use strict";
+
+let gulp = require('gulp');
+let mainBowerFiles = require('main-bower-files');
+let less = require('gulp-less');
+let rename = require('gulp-rename');
+let cleanCSS = require('gulp-clean-css');
+let babel = require('gulp-babel');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+
 
 gulp.task('bower', function() {
     return gulp.src(mainBowerFiles(), {
@@ -23,6 +29,20 @@ gulp.task('bootstrap:compileLess', ['bootstrap:prepareLess'], function() {
         .pipe(rename('bootstrap.min.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('public/lib/bootstrap/dist/css'));
+});
+
+gulp.task('requirejs:compileConfig', function() {
+    return gulp.src(['public/lib/requirejs/require.js','public/lib/requirejs/config.js'])
+        .pipe(concat("require.compiled.js"))
+        .pipe(gulp.dest('public/lib/requirejs/'))
+});
+
+gulp.task('babel-es6', ['requirejs:compileConfig'] , function() {
+    return gulp.src('public/src/general/es6/*')
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('public/src/general/dist/'))
 });
 
 gulp.task('watch', function() {

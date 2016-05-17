@@ -4,6 +4,8 @@
   "description": "",
   "main": "none",
   "dependencies": {
+    "bower": "^1.7.9",
+    "bower-requirejs": "^1.2.0",
     "gulp-clean-css": "^2.0.7"
   },
   "devDependencies": {
